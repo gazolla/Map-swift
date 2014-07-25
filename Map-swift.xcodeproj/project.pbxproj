@@ -10,6 +10,8 @@
 		0828A057198291AA009393DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0828A056198291AA009393DF /* AppDelegate.swift */; };
 		0828A059198291AA009393DF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0828A058198291AA009393DF /* Images.xcassets */; };
 		0828A065198291AA009393DF /* Map_swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0828A064198291AA009393DF /* Map_swiftTests.swift */; };
+		0828A06F19829341009393DF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0828A06E19829341009393DF /* MapViewController.swift */; };
+		0828A071198295DA009393DF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0828A070198295DA009393DF /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,6 +32,8 @@
 		0828A05E198291AA009393DF /* Map-swiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Map-swiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0828A063198291AA009393DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0828A064198291AA009393DF /* Map_swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map_swiftTests.swift; sourceTree = "<group>"; };
+		0828A06E19829341009393DF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		0828A070198295DA009393DF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0828A071198295DA009393DF /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +61,7 @@
 				0828A053198291AA009393DF /* Map-swift */,
 				0828A061198291AA009393DF /* Map-swiftTests */,
 				0828A052198291AA009393DF /* Products */,
+				0828A070198295DA009393DF /* MapKit.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,6 +80,7 @@
 				0828A056198291AA009393DF /* AppDelegate.swift */,
 				0828A058198291AA009393DF /* Images.xcassets */,
 				0828A054198291AA009393DF /* Supporting Files */,
+				0828A06E19829341009393DF /* MapViewController.swift */,
 			);
 			path = "Map-swift";
 			sourceTree = "<group>";
@@ -201,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0828A057198291AA009393DF /* AppDelegate.swift in Sources */,
+				0828A06F19829341009393DF /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
