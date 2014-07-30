@@ -42,6 +42,27 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         self.map!.setRegion(region, animated: true)
     }
     
-    
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+            
+            if annotation is MKUserLocation {
+                //return nil so map view draws "blue dot" for standard user location
+                return nil
+            }
+            
+            let reuseId = "pin"
+            
+            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+            if pinView == nil {
+                pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+                pinView!.canShowCallout = true
+                pinView!.animatesDrop = true
+                pinView!.pinColor = .Purple
+            }
+            else {
+                pinView!.annotation = annotation
+            }
+            
+            return pinView
+    }
     
 }
