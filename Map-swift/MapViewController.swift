@@ -9,10 +9,9 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate{
+class MapViewController: UIViewController, MKMapViewDelegate{
     
     var map:MKMapView?
-    let locationManager:CLLocationManager = CLLocationManager()
     
     convenience init(frame:CGRect){
         self.init(nibName: nil, bundle: nil)
@@ -21,12 +20,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
         self.map = MKMapView(frame: frame)
         self.map!.delegate = self
-        //self.map!.showsUserLocation = true
         
         self.view.addSubview(self.map)
         
 
        adjustRegion(37.3175,aLongitude: -122.0419)
+       addPoint("Whole Foods Market", aCategory: "Grocery Store", aLatitude: 37.323551, aLongitude: -122.039653)
     }
     
     func adjustRegion(aLatitude:CLLocationDegrees, aLongitude: CLLocationDegrees){
@@ -40,6 +39,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         var region:MKCoordinateRegion = MKCoordinateRegionMake(Center, aSpan)
         
         self.map!.setRegion(region, animated: true)
+    }
+    
+    func addPoint(aName:String, aCategory:String,aLatitude:CLLocationDegrees, aLongitude: CLLocationDegrees){
+        var point:MKPointAnnotation = MKPointAnnotation()
+        point.coordinate = CLLocationCoordinate2DMake(aLatitude,aLongitude);
+        point.title = aName
+        point.subtitle = aCategory
+        
+        map!.addAnnotation(point)
     }
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
