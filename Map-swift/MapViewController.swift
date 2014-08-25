@@ -21,7 +21,7 @@ class MapViewController: UIViewController, MKMapViewDelegate{
         self.map = MKMapView(frame: frame)
         self.map!.delegate = self
         
-        self.view.addSubview(self.map)
+        self.view.addSubview(self.map!)
         
 
        adjustRegion(37.3175,aLongitude: -122.0419)
