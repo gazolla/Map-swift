@@ -8,69 +8,89 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-class MapViewController: UIViewController, MKMapViewDelegate{
+class MapViewController: UIViewController{
     
-    var map:MKMapView?
+    lazy var mapView: MKMapView = {
+        let mv = MKMapView()
+        mv.translatesAutoresizingMaskIntoConstraints = false
+        mv.mapType = .standard
+        mv.showsCompass = false
+        mv.showsScale = false
+        mv.isZoomEnabled = true
+        mv.isScrollEnabled = true
+        mv.showsUserLocation = true
+        
+        let scale = MKScaleView(mapView: mv)
+        scale.translatesAutoresizingMaskIntoConstraints = false
+        scale.scaleVisibility = .visible
+        
+        mv.addSubview(scale)
+        
+        let compass = MKCompassButton(mapView: mv)
+        compass.translatesAutoresizingMaskIntoConstraints = false
+        compass.compassVisibility = .visible
+        
+        mv.addSubview(compass)
+        
+        let guide = mv.safeAreaLayoutGuide
+        NSLayoutConstraint.activate(
+            [
+                scale.leftAnchor.constraint(equalTo: guide.leftAnchor, constant: 16.0),
+                scale.rightAnchor.constraint(equalTo: guide.centerXAnchor),
+                scale.topAnchor.constraint(equalTo: guide.topAnchor),
+                scale.heightAnchor.constraint(equalToConstant: 20.0),
+                compass.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -12.0),
+                compass.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -12.0)
+            ]
+        )
+        
+        return mv
+    }()
     
-    convenience init(frame:CGRect){
-        self.init(nibName: nil, bundle: nil)
-        self.view.frame = frame
-        self.title = "Maps on Swift"
-
-        self.map = MKMapView(frame: frame)
-        self.map!.delegate = self
-        
-        self.view.addSubview(self.map!)
-        
-
-       adjustRegion(37.3175,aLongitude: -122.0419)
-       addPoint("Whole Foods Market", aCategory: "Grocery Store", aLatitude: 37.323551, aLongitude: -122.039653)
+    let locationManager:CLLocationManager = {
+        let lm = CLLocationManager()
+        return lm
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(mapView)
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
     
-    func adjustRegion(aLatitude:CLLocationDegrees, aLongitude: CLLocationDegrees){
-        var latitude:CLLocationDegrees = aLatitude
-        var longitude:CLLocationDegrees = aLongitude
-        var latDelta:CLLocationDegrees = 0.5
-        var longDelta:CLLocationDegrees = 0.5
-        
-        var aSpan:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: latDelta,longitudeDelta: longDelta)
-        var Center :CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
-        var region:MKCoordinateRegion = MKCoordinateRegionMake(Center, aSpan)
-        
-        self.map!.setRegion(region, animated: true)
+    override func viewWillLayoutSubviews() {
+        let margins = view.safeAreaLayoutGuide
+        mapView.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        mapView.widthAnchor.constraint(equalTo: margins.widthAnchor).isActive = true
+        mapView.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        mapView.heightAnchor.constraint(equalTo: margins.heightAnchor).isActive = true
+    }
+}
+
+extension MapViewController : CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error:: \(error.localizedDescription)")
     }
     
-    func addPoint(aName:String, aCategory:String,aLatitude:CLLocationDegrees, aLongitude: CLLocationDegrees){
-        var point:MKPointAnnotation = MKPointAnnotation()
-        point.coordinate = CLLocationCoordinate2DMake(aLatitude,aLongitude);
-        point.title = aName
-        point.subtitle = aCategory
-        
-        map!.addAnnotation(point)
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            locationManager.requestLocation()
+        }
     }
     
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
-            
-            if annotation is MKUserLocation {
-                //return nil so map view draws "blue dot" for standard user location
-                return nil
-            }
-            
-            let reuseId = "pin"
-            
-            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
-            if pinView == nil {
-                pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-                pinView!.canShowCallout = true
-                pinView!.animatesDrop = true
-                pinView!.pinColor = .Purple
-            }
-            else {
-                pinView!.annotation = annotation
-            }
-            
-            return pinView
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else { return }
+        let span = MKCoordinateSpanMake(0.05, 0.05)
+        let region = MKCoordinateRegion(center: location.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
 }
